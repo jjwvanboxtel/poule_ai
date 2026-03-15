@@ -231,6 +231,13 @@ Werkt voor:
 - Publiek inzicht zonder account
 - Onderhoudbare en schaalbare architectuur
 
+## 16. Documentatie
+
+- Schrijf documentatie, bv instructie om applicatie uitvoeren, architecture, database model etc
+- Plaats documentatie in /docs
+- Beschrijf documentatie in markdown files.
+- Voor diagrammen gebruik mermaid.
+
 ---
 
 **Einde PRD**
