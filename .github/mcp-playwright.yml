@@ -1,0 +1,30 @@
+# Playwright MCP server (repository-level helper)
+# This file documents how to start the MCP server for Playwright and can be used by humans
+# or by automation that reads repository-level MCP metadata.
+name: playwright
+description: "Playwright MCP server for local development and agent-driven Playwright tasks. Start with the provided PowerShell helper."
+command: npx
+args:
+  - playwright-mcp
+  - serve
+  - --port
+  - "9222"
+tools:
+  - "playwright/*"
+  - "execute"
+env:
+  PLAYWRIGHT_BROWSERS_PATH: "0"
+readme: |
+  Quick start:
+
+  - Start the MCP server (PowerShell):
+
+      pwsh -File .specify\scripts\powershell\start-playwright-mcp.ps1 -Port 9222
+
+  - Or via npm script after installing deps:
+
+      npm run start:mcp
+
+  - Connect agents or tools to: http://localhost:9222
+
+  Update this block if you prefer a different port or process manager.
