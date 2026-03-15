@@ -148,7 +148,7 @@ Voorbeelden:
 - Juiste uitslag
 - Juiste winnaar / gelijkspel
 - Kaarten (geel / rood)
-- Knock-out winnaar
+- Knock-out teams
 - Bonusvragen
 
 ---

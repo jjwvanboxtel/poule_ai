@@ -9,7 +9,8 @@ Bouw een onderhoudbare, uitbreidbare webapplicatie voor het beheren van voetbalp
 - Voorkom aannames over hosting of tooling: specificeer constraints expliciet in de planfase.
 
 ## Technische randvoorwaarden (non‑negotiables)
-- PHP 8.x op gedeelde hosting (LAMP) is primaire runtime; server‑side rendering vereist.
+- PHP 8.4.x op gedeelde hosting (LAMP) is primaire runtime; server‑side rendering vereist.
+- De applicatie moet deploybaar en uitvoerbaar zijn op shared hosting zonder framework-specifieke serververeisten; Laravel en Symfony zijn daarom niet toegestaan.
 - Gebruik PDO met prepared statements voor databanktoegang.
 - CSRF‑bescherming en server‑side autorisatie/rolchecks verplicht.
 - Deadlines moeten strikt gehandhaafd worden: na uiterste inleverdatum zijn voorspellingen read‑only.
@@ -35,6 +36,7 @@ Bouw een onderhoudbare, uitbreidbare webapplicatie voor het beheren van voetbalp
 
 ## Operationale richtlijnen voor ontwikkelaars
 - Noem belangrijke beperkingen expliciet in de Specify/Plan documenten (bijv. shared hosting, PHP versie, PDO gebruik).
+- Kies libraries en architectuur die compatibel blijven met eenvoudige shared hosting; vermijd afhankelijkheden van framework bootstrapping, queue workers, CLI-only workflows of container-based deployment.
 - Schrijf tests voor puntencalculatie en deadline‑enforcement; vertrouw niet alleen op handmatige QA.
 
 ---
