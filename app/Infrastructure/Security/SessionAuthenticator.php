@@ -21,7 +21,7 @@ final class SessionAuthenticator
     public function attempt(string $email, string $password): bool
     {
         $stmt = $this->pdo->prepare(
-            'SELECT id, password_hash, is_active FROM users WHERE email = ? LIMIT 1',
+            'SELECT id, password_hash, is_active, role FROM users WHERE email = ? LIMIT 1',
         );
         $stmt->execute([$email]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -43,6 +43,7 @@ final class SessionAuthenticator
         // Store minimal session data
         $this->session->regenerate();
         $this->session->set('user_id', self::intValue($row['id'] ?? null));
+        $this->session->set('user_role', self::stringValue($row['role'] ?? null));
 
         return true;
     }
