@@ -29,11 +29,11 @@ description: "Task list for feature implementation"
 
 **Purpose**: Create the project skeleton, package manifests, and runtime configuration needed by all later slices.
 
-- [ ] T001 Initialize PHP package metadata, PSR-4 autoloading, and developer scripts in `composer.json`
-- [ ] T002 [P] Initialize Node tooling and Playwright package scripts in `package.json` and `playwright.config.ts`
-- [ ] T003 [P] Create the front controller and bootstrap entrypoints in `public/index.php`, `public/.htaccess`, `bootstrap/app.php`, and `bootstrap/dependencies.php`
-- [ ] T004 [P] Create environment and runtime configuration scaffolding in `.env.example`, `config/app.php`, `config/database.php`, `config/security.php`, and `config/scoring.php`
-- [ ] T005 [P] Create writable application directories and placeholders in `storage/cache/.gitkeep`, `storage/logs/.gitkeep`, `storage/uploads/logos/.gitkeep`, and `resources/views/layouts/app.php`
+- [X] T001 Initialize PHP package metadata, PSR-4 autoloading, and developer scripts in `composer.json`
+- [X] T002 [P] Initialize Node tooling and Playwright package scripts in `package.json` and `playwright.config.ts`
+- [X] T003 [P] Create the front controller and bootstrap entrypoints in `public/index.php`, `public/.htaccess`, `bootstrap/app.php`, and `bootstrap/dependencies.php`
+- [X] T004 [P] Create environment and runtime configuration scaffolding in `.env.example`, `config/app.php`, `config/database.php`, `config/security.php`, and `config/scoring.php`
+- [X] T005 [P] Create writable application directories and placeholders in `storage/cache/.gitkeep`, `storage/logs/.gitkeep`, `storage/uploads/logos/.gitkeep`, and `resources/views/layouts/app.php`
 
 ---
 
@@ -43,13 +43,13 @@ description: "Task list for feature implementation"
 
 **CRITICAL**: No user story work should begin until this phase is complete.
 
-- [ ] T006 Create the core schema and migration runner in `database/migrations/001_create_core_tables.php` and `bin/migrate.php`
-- [ ] T007 [P] Create PDO connection and base repository infrastructure in `app/Infrastructure/Persistence/Pdo/ConnectionFactory.php` and `app/Infrastructure/Persistence/Pdo/AbstractPdoRepository.php`
-- [ ] T008 [P] Create request routing and HTTP error handling primitives in `app/Support/Routing/Router.php`, `app/Http/Requests/Request.php`, and `app/Http/Controllers/ErrorController.php`
-- [ ] T009 [P] Create session, authentication, and CSRF middleware/services in `app/Support/Sessions/SessionManager.php`, `app/Infrastructure/Security/SessionAuthenticator.php`, `app/Http/Middleware/RequireAuth.php`, and `app/Http/Middleware/VerifyCsrfToken.php`
-- [ ] T010 [P] Create shared SSR rendering, escaping, flash messaging, and validation support in `app/Support/View/ViewRenderer.php`, `app/Support/View/Escaper.php`, `app/Support/Validation/ValidationException.php`, and `resources/views/partials/flash.php`
-- [ ] T011 [P] Create foundational user and competition domain models in `app/Domain/User/User.php`, `app/Domain/Competition/Competition.php`, `app/Domain/Competition/CompetitionSection.php`, and `app/Domain/Competition/CompetitionRule.php`
-- [ ] T012 Create baseline repositories and local seed tooling in `app/Infrastructure/Persistence/Pdo/PdoUserRepository.php`, `app/Infrastructure/Persistence/Pdo/PdoCompetitionRepository.php`, `database/seeders/DevSeeder.php`, and `bin/seed.php`
+- [X] T006 Create the core schema and migration runner in `database/migrations/001_create_core_tables.php` and `bin/migrate.php`
+- [X] T007 [P] Create PDO connection and base repository infrastructure in `app/Infrastructure/Persistence/Pdo/ConnectionFactory.php` and `app/Infrastructure/Persistence/Pdo/AbstractPdoRepository.php`
+- [X] T008 [P] Create request routing and HTTP error handling primitives in `app/Support/Routing/Router.php`, `app/Http/Requests/Request.php`, and `app/Http/Controllers/ErrorController.php`
+- [X] T009 [P] Create session, authentication, and CSRF middleware/services in `app/Support/Sessions/SessionManager.php`, `app/Infrastructure/Security/SessionAuthenticator.php`, `app/Http/Middleware/RequireAuth.php`, and `app/Http/Middleware/VerifyCsrfToken.php`
+- [X] T010 [P] Create shared SSR rendering, escaping, flash messaging, and validation support in `app/Support/View/ViewRenderer.php`, `app/Support/View/Escaper.php`, `app/Support/Validation/ValidationException.php`, and `resources/views/partials/flash.php`
+- [X] T011 [P] Create foundational user and competition domain models in `app/Domain/User/User.php`, `app/Domain/Competition/Competition.php`, `app/Domain/Competition/CompetitionSection.php`, and `app/Domain/Competition/CompetitionRule.php`
+- [X] T012 Create baseline repositories and local seed tooling in `app/Infrastructure/Persistence/Pdo/PdoUserRepository.php`, `app/Infrastructure/Persistence/Pdo/PdoCompetitionRepository.php`, `database/seeders/DevSeeder.php`, and `bin/seed.php`
 
 **Checkpoint**: The application can bootstrap requests, connect to MySQL, render SSR pages, and enforce session/CSRF/authentication rules.
 
@@ -63,21 +63,21 @@ description: "Task list for feature implementation"
 
 ### Tests for User Story 1
 
-- [ ] T013 [P] [US1] Add unit tests for completeness, deadline, bonus-answer validation, and immutable-final-submission invariants in `tests/Unit/Predictions/SubmitPredictionServiceTest.php`
-- [ ] T014 [P] [US1] Add participant prediction route contract tests for `/dashboard`, `/competitions/{slug}/prediction`, and `/competitions/{slug}/prediction/submit` in `tests/Contract/ParticipantPredictionRoutesTest.php`
-- [ ] T015 [P] [US1] Add Playwright coverage for participant registration, bonus-question entry, final submission, unpaid marker visibility, and read-only review in `tests/E2E/participant-prediction-submission.spec.ts`
+- [X] T013 [P] [US1] Add unit tests for completeness, deadline, bonus-answer validation, and immutable-final-submission invariants in `tests/Unit/Predictions/SubmitPredictionServiceTest.php`
+- [X] T014 [P] [US1] Add participant prediction route contract tests for `/dashboard`, `/competitions/{slug}/prediction`, and `/competitions/{slug}/prediction/submit` in `tests/Contract/ParticipantPredictionRoutesTest.php`
+- [X] T015 [P] [US1] Add Playwright coverage for participant registration, bonus-question entry, final submission, unpaid marker visibility, and read-only review in `tests/E2E/participant-prediction-submission.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T016 [P] [US1] Create prediction persistence tables in `database/migrations/002_create_prediction_tables.php`
-- [ ] T017 [P] [US1] Create prediction domain models in `app/Domain/Prediction/PredictionSubmission.php`, `app/Domain/Prediction/MatchPrediction.php`, `app/Domain/Prediction/KnockoutRoundPrediction.php`, and `app/Domain/Prediction/BonusAnswer.php`
-- [ ] T018 [P] [US1] Implement participant registration and session login/logout flows in `app/Http/Controllers/Auth/RegisterController.php`, `app/Http/Controllers/Auth/LoginController.php`, `resources/views/auth/register.php`, and `resources/views/auth/login.php`
-- [ ] T019 [P] [US1] Implement prediction repositories and section-aware payload mapping in `app/Infrastructure/Persistence/Pdo/PdoPredictionSubmissionRepository.php`, `app/Infrastructure/Persistence/Pdo/PdoMatchPredictionRepository.php`, and `app/Infrastructure/Persistence/Pdo/PdoBonusAnswerRepository.php`
-- [ ] T020 [US1] Implement final submission orchestration and transactional persistence in `app/Application/Predictions/SubmitPredictionService.php` and `app/Application/Predictions/PredictionPayloadValidator.php`
-- [ ] T021 [US1] Implement knock-out round validation against active competition entities in `app/Application/Predictions/KnockoutPredictionValidator.php` and `app/Infrastructure/Persistence/Pdo/PdoKnockoutRoundRepository.php`
-- [ ] T022 [US1] Implement participant bonus-question answer validation, persistence rules, and dropdown rendering for entity-backed questions in `app/Application/Predictions/BonusAnswerValidator.php`, `app/Http/ViewModels/PredictionFormViewModel.php`, and `resources/views/participants/prediction-form.php`
-- [ ] T023 [US1] Implement participant dashboard, prediction form, confirmation page, and read-only rendering in `app/Http/Controllers/Participant/DashboardController.php`, `app/Http/Controllers/Participant/PredictionController.php`, `resources/views/participants/dashboard.php`, `resources/views/participants/prediction-form.php`, and `resources/views/participants/prediction-confirmation.php`
-- [ ] T024 [US1] Wire participant routes and deadline enforcement in `bootstrap/app.php` and `app/Http/Middleware/EnforceCompetitionDeadline.php`
+- [X] T016 [P] [US1] Create prediction persistence tables in `database/migrations/002_create_prediction_tables.php`
+- [X] T017 [P] [US1] Create prediction domain models in `app/Domain/Prediction/PredictionSubmission.php`, `app/Domain/Prediction/MatchPrediction.php`, `app/Domain/Prediction/KnockoutRoundPrediction.php`, and `app/Domain/Prediction/BonusAnswer.php`
+- [X] T018 [P] [US1] Implement participant registration and session login/logout flows in `app/Http/Controllers/Auth/RegisterController.php`, `app/Http/Controllers/Auth/LoginController.php`, `resources/views/auth/register.php`, and `resources/views/auth/login.php`
+- [X] T019 [P] [US1] Implement prediction repositories and section-aware payload mapping in `app/Infrastructure/Persistence/Pdo/PdoPredictionSubmissionRepository.php`, `app/Infrastructure/Persistence/Pdo/PdoMatchPredictionRepository.php`, and `app/Infrastructure/Persistence/Pdo/PdoBonusAnswerRepository.php`
+- [X] T020 [US1] Implement final submission orchestration and transactional persistence in `app/Application/Predictions/SubmitPredictionService.php` and `app/Application/Predictions/PredictionPayloadValidator.php`
+- [X] T021 [US1] Implement knock-out round validation against active competition entities in `app/Application/Predictions/KnockoutPredictionValidator.php` and `app/Infrastructure/Persistence/Pdo/PdoKnockoutRoundRepository.php`
+- [X] T022 [US1] Implement participant bonus-question answer validation, persistence rules, and dropdown rendering for entity-backed questions in `app/Application/Predictions/BonusAnswerValidator.php`, `app/Http/ViewModels/PredictionFormViewModel.php`, and `resources/views/participants/prediction-form.php`
+- [X] T023 [US1] Implement participant dashboard, prediction form, confirmation page, and read-only rendering in `app/Http/Controllers/Participant/DashboardController.php`, `app/Http/Controllers/Participant/PredictionController.php`, `resources/views/participants/dashboard.php`, `resources/views/participants/prediction-form.php`, and `resources/views/participants/prediction-confirmation.php`
+- [X] T024 [US1] Wire participant routes and deadline enforcement in `bootstrap/app.php` and `app/Http/Middleware/EnforceCompetitionDeadline.php`
 
 **Checkpoint**: A participant can complete and final-submit one full prediction, while incomplete or late submissions are rejected and the stored submission is read-only afterward.
 

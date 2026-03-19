@@ -15,6 +15,14 @@
 - Q: Wat moet er gebeuren als een competitie geen actieve secties heeft? → A: De competitie mag niet actief/open voor inzending zijn zolang er geen actieve secties zijn.
 - Q: Hoe moet CSV-import omgaan met ongeldige of dubbele rijen? → A: De volledige import faalt zodra één rij ongeldig of dubbel is, met duidelijke foutmelding.
 
+### Session 2026-03-16
+
+- Q: Hoe moeten competitiestatussen exact worden afgebakend? → A: `draft` = niet publiek en geen inzendingen; `active` = publiek zichtbaar; `open` = inzendingen toegestaan tot de deadline; `closed` = publiek zichtbaar maar alleen-lezen na deadline; `archived` = historisch en alleen-lezen.
+- Q: Hoe wordt een gebruiker deelnemer van een competitie? → A: Beide zijn toegestaan: zelfinschrijving voor open competities en handmatige koppeling door een beheerder.
+- Q: Welke acties moet de beschermde onderhoudsworkflow zonder CLI/SSH minimaal ondersteunen? → A: Database-migraties uitvoeren en handmatige standherberekening starten.
+- Q: Wat is de verplichte scope voor groepen, speelsteden en wedstrijden? → A: Alle drie moeten via de beheer-UI beheerbaar zijn; import is een optionele extra.
+- Q: Hoe zichtbaar moet de markering voor onbetaalde deelnemers precies zijn? → A: Toon een duidelijke badge/label `Onbetaald` alleen aan beheerders en aan de betreffende deelnemer zelf in private views. Onbetaalde deelnemers verschijnen niet in publieke standenlijsten of andere publieke deelnemersoverzichten totdat zij als betaald zijn gemarkeerd.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Deelnemer levert volledige voorspelling in (Priority: P1)
@@ -34,6 +42,7 @@ Als deelnemer wil ik voor een competitie alle actieve voorspellingssecties volle
 5. **Given** een deelnemer met openstaande betaling, **When** deze een volledige voorspelling definitief indient binnen de deadline, **Then** accepteert het systeem de inzending en markeert het de betalingsstatus zichtbaar als onbetaald.
 6. **Given** een competitie met een actieve knock-out sectie, **When** een deelnemer zijn voorspelling invult, **Then** kan deze per knock-out ronde de vereiste landen/teams selecteren volgens het voor die ronde geconfigureerde aantal posities.
 7. **Given** een competitie met actieve bonusvragen, **When** een deelnemer een entity-gebaseerde bonusvraag invult, **Then** toont het systeem een dropdown met geldige actieve entiteiten en slaat het antwoord op als onderdeel van dezelfde definitieve inzending.
+8. **Given** een onbetaalde deelnemer die is ingelogd, **When** deze zijn eigen competitie- of inzendpagina bekijkt, **Then** ziet alleen die deelnemer zelf een duidelijke `Onbetaald`-markering zonder dat inzendingen worden geblokkeerd.
 
 ---
 
@@ -55,8 +64,9 @@ Als beheerder wil ik competities, secties, deelnemers, betalingen en puntinstell
 6. **Given** een competitie zonder actieve secties, **When** een beheerder probeert die competitie actief te maken of open te stellen voor inzending, **Then** weigert het systeem die statuswijziging totdat minimaal één sectie actief is.
 7. **Given** een competitie met een knock-out fase, **When** een beheerder de knock-out structuur configureert, **Then** kan deze meerdere rondes definiëren en per ronde de deelnemende teams invullen volgens het voor die ronde geldende aantal posities.
 8. **Given** een geregistreerde gebruiker, **When** een beheerder deze aan een competitie toevoegt, **Then** wordt de gebruiker als deelnemer aan die competitie gekoppeld zonder extra codewijzigingen.
-9. **Given** een competitie met groepen, speelsteden en wedstrijden, **When** een beheerder die beheert of importeert, **Then** bewaart het systeem deze gegevens consistent voor voorspellingen, uitslagen en publieke wedstrijdinformatie.
-10. **Given** een omgeving zonder shelltoegang, **When** een beheerder een migratie of handmatige standherberekening moet uitvoeren, **Then** biedt het systeem hiervoor een beschermde beheerworkflow.
+9. **Given** een open competitie, **When** een geregistreerde gebruiker zichzelf inschrijft, **Then** wordt die gebruiker als deelnemer aan die competitie gekoppeld zolang de competitie open is voor inzendingen.
+10. **Given** een competitie met groepen, speelsteden en wedstrijden, **When** een beheerder die beheert via de beheer-UI, **Then** bewaart het systeem deze gegevens consistent voor voorspellingen, uitslagen en publieke wedstrijdinformatie.
+11. **Given** een omgeving zonder shelltoegang, **When** een beheerder database-migraties of een handmatige standherberekening moet uitvoeren, **Then** biedt het systeem hiervoor een beschermde beheerworkflow.
 
 ---
 
@@ -75,6 +85,7 @@ Als gast of deelnemer wil ik publieke competitie-informatie, uitslagen en stande
 3. **Given** een verwerkte uitslagwijziging die punten of rangorde verandert, **When** de standen opnieuw worden berekend, **Then** legt het systeem automatisch een nieuwe standensnapshot vast.
 4. **Given** een sub-competitie met een subset van deelnemers, **When** een gebruiker de sub-competitiestand bekijkt, **Then** gebruikt het systeem dezelfde voorspellingen en punten als de hoofdcompetitie maar toont alleen de relevante deelnemers.
 5. **Given** een publieke resultatenpagina, **When** een gebruiker wedstrijdinformatie bekijkt, **Then** toont het systeem ook de gekoppelde groep en speelstad waar beschikbaar.
+6. **Given** een onbetaalde deelnemer, **When** een gast of andere deelnemer publieke standen of publieke deelnemersinformatie bekijkt, **Then** verschijnt die onbetaalde deelnemer daar niet totdat een beheerder de betalingsstatus op betaald zet.
 
 ---
 
@@ -88,7 +99,9 @@ Als gast of deelnemer wil ik publieke competitie-informatie, uitslagen en stande
 - Wanneer nog geen vorige snapshot bestaat, toont het systeem deelnemers als `nieuw`; een handmatige herberekening maakt altijd een nieuwe snapshot aan volgens dezelfde bewegingsregels.
 - Wanneer een beheerder secties of puntregels wijzigt na eerdere inzendingen, toont het systeem deelnemers een zichtbare melding dat de configuratie is gewijzigd.
 - Wanneer een sub-competitie geen deelnemers bevat, toont het systeem een lege standenweergave met duidelijke melding in plaats van een fout.
-- De zichtbare markering voor onbetaalde deelnemers verschijnt in beheer-, dashboard- en publieke standencontext waar de deelnemer zichtbaar is.
+- De zichtbare markering voor onbetaalde deelnemers verschijnt alleen in beheercontext en in de private weergave van de betreffende deelnemer zelf.
+- Onbetaalde deelnemers tellen niet mee in publieke standenlijsten of andere publieke deelnemersoverzichten totdat hun betalingsstatus op betaald staat.
+- Zelfinschrijving is alleen toegestaan voor competities met status `open`; handmatige koppeling door een beheerder blijft altijd mogelijk binnen beheerrechten.
 
 ## Requirements *(mandatory)*
 
@@ -98,14 +111,17 @@ Als gast of deelnemer wil ik publieke competitie-informatie, uitslagen en stande
 - **FR-002**: Het systeem MUST deelnemeraccounts ondersteunen met minimaal voornaam, achternaam, uniek e-mailadres, telefoonnummer en een gehasht wachtwoord.
 - **FR-003**: Het systeem MUST rollen en rechten afdwingen volgens de hiërarchie beheerder > deelnemer > gast.
 - **FR-004**: Het systeem MUST verhinderen dat de laatste actieve beheerder wordt verwijderd, gedeactiveerd of gedegradeerd.
-- **FR-005**: Het systeem MUST beheerders in staat stellen competities aan te maken, te wijzigen, te activeren en te deactiveren.
+- **FR-005**: Het systeem MUST beheerders in staat stellen competities aan te maken, te wijzigen en de lifecycle-statussen `draft`, `active`, `open`, `closed` en `archived` te beheren volgens de vastgelegde toegangsregels.
 - **FR-006**: Het systeem MUST per competitie naam, beschrijving, startdatum, einddatum, uiterste inleverdatum, actiefstatus, inlegbedrag, prijsverdeling en logo kunnen beheren.
 - **FR-007**: Het systeem MUST valideren dat de prijsverdeling voor eerste, tweede en derde plaats samen exact 100% vormt.
 - **FR-008**: Het systeem MUST per competitie configureerbare secties ondersteunen voor groepsfase uitslagen, winnaar/verliezer/gelijkspel, gele en rode kaarten, knock-out fase en bonusvragen.
+- **FR-008a**: Het systeem MUST voor elke actieve wedstrijdgerelateerde sectie per relevante wedstrijd de bijbehorende voorspelling vereisen voordat een definitieve inzending mogelijk is.
 - **FR-009**: Het systeem MUST per actieve sectie een configureerbare puntenwaarde ondersteunen.
-- **FR-010**: Het systeem MUST verhinderen dat een competitie actief of open voor inzending wordt gezet zolang er geen actieve secties zijn.
+- **FR-010**: Het systeem MUST de competitiestatussen als volgt afdwingen: `draft` = niet publiek en geen inzendingen; `active` = publiek zichtbaar; `open` = publiek zichtbaar en inzendingen toegestaan; `closed` = publiek zichtbaar maar alleen-lezen; `archived` = historisch en alleen-lezen.
+- **FR-010a**: Het systeem MUST verhinderen dat een competitie `active` of `open` wordt gezet zolang er geen actieve secties zijn.
 - **FR-011**: Het systeem MUST wedstrijden kunnen koppelen aan een groep en een speelstad en deze informatie tonen bij wedstrijdinformatie.
 - **FR-012**: Het systeem MUST bonusvragen ondersteunen van het type entity-gebaseerd, numeriek en open tekst.
+- **FR-012a**: Het systeem MUST bonusvraagondersteuning voor deelnemers scheiden van bonusvraagbeheer door beheerders: deelnemers beantwoorden alleen actieve bonusvragen binnen hun inzending, terwijl beheerders de bonusvraagdefinities en activatie beheren.
 - **FR-013**: Het systeem MUST voor entity-gebaseerde bonusvragen alleen antwoorden accepteren die verwijzen naar actieve, valide entiteiten.
 - **FR-014**: Het systeem MUST voor entity-gebaseerde vragen dropdown-selecties aanbieden.
 - **FR-015**: Het systeem MUST bulkimport via CSV ondersteunen voor spelers en andere entiteiten.
@@ -119,33 +135,41 @@ Als gast of deelnemer wil ik publieke competitie-informatie, uitslagen en stande
 - **FR-023**: Het systeem MUST knock-out voorspellingen valideren op exact het vereiste aantal ingevulde landen/teams per ronde voordat een definitieve inzending mogelijk is.
 - **FR-024**: Het systeem MUST deelnemers verplichten om alle actieve secties volledig in te vullen voordat een voorspelling definitief kan worden ingediend.
 - **FR-025**: Het systeem MUST voorspellingen per deelnemer en competitie als een enkele definitieve inzending opslaan; gedeeltelijke inzendingen zijn niet toegestaan.
-- **FR-026**: Het systeem MUST na de uiterste inleverdatum nieuwe inzendingen en wijzigingen blokkeren en bestaande voorspellingen read-only tonen.
+- **FR-026**: Het systeem MUST na de uiterste inleverdatum nieuwe inzendingen en wijzigingen blokkeren, de competitie-inzendstatus automatisch als `closed` behandelen en bestaande voorspellingen read-only tonen.
 - **FR-027**: Het systeem MUST puntentelling volledig data-gedreven uitvoeren zonder hardcoded scoringsregels in de applicatielogica.
 - **FR-028**: Het systeem MUST puntregels per competitie en per sectie configureerbaar maken.
 - **FR-029**: Het systeem MUST beheerders toestaan sectie-instellingen en puntregels op elk moment te wijzigen, ook nadat deelnemers al hebben ingezonden.
 - **FR-030**: Het systeem MUST sub-competities ondersteunen die behoren bij een hoofdcompetitie en een subset van deelnemers bevatten.
 - **FR-031**: Het systeem MUST voor sub-competities dezelfde voorspellingen en puntresultaten gebruiken als voor de gekoppelde hoofdcompetitie.
 - **FR-032**: Het systeem MUST automatisch een nieuwe standensnapshot opslaan na elke verwerkte uitslagwijziging die punten of rangorde verandert.
+- **FR-032a**: Het systeem MUST publieke en interne standenweergaven opbouwen vanuit de laatst beschikbare relevante standensnapshot en niet vanuit live heraggregatie tijdens paginarendering.
 - **FR-033**: Het systeem MUST beheerders een handmatige herberekening en nieuwe snapshot-creatie laten uitvoeren voor correcties of herstelacties.
 - **FR-034**: Het systeem MUST per deelnemer in een standenlijst huidige positie, naam, totaalpunten, richting van positie-verandering en aantal plaatsen verschil tonen.
 - **FR-035**: Het systeem MUST indicatoren voor gestegen, gedaald, gelijk en nieuw ondersteunen in hoofdcompetities, sub-competities en publieke weergaven.
 - **FR-036**: Het systeem MUST beheerders per deelnemer een betalingsstatus laten vastleggen.
 - **FR-037**: Het systeem MUST de betalingsstatus zichtbaar markeren zonder deelname of definitieve inzendingen van onbetaalde deelnemers te blokkeren.
+- **FR-037a**: Het systeem MUST een duidelijke badge of label `Onbetaald` tonen aan beheerders en aan de betreffende deelnemer zelf in private views.
+- **FR-037b**: Het systeem MUST onbetaalde deelnemers uitsluiten van publieke standenlijsten en andere publieke deelnemersoverzichten totdat hun betalingsstatus op betaald staat.
 - **FR-038**: Het systeem MUST publieke competitie-overzichten tonen met naam, logo, beschrijving, start- en einddatum, aantal betaalde deelnemers, totale inleg en prijzengeldverdeling.
 - **FR-039**: Het systeem MUST server-side rol- en rechtenchecks afdwingen voor alle beheer- en deelnemeracties.
 - **FR-040**: Het systeem MUST CSRF-bescherming toepassen op muterende requests.
 - **FR-041**: Het systeem MUST database-interacties uitvoeren via PDO met prepared statements.
 - **FR-042**: Het systeem MUST server-side rendered pagina's leveren die bruikbaar zijn op desktop en mobiel.
+- **FR-042a**: Het systeem MUST kernflows voor registratie, inloggen, voorspelling invullen, beheerformulieren en standenweergave bruikbaar maken op minimaal 360 px schermbreedte zonder horizontaal scrollen.
+- **FR-042b**: Het systeem MUST formulieren toetsenbordtoegankelijk maken en voorzien van duidelijke labels en foutmeldingen voor verplichte velden en validatiefouten.
 - **FR-043**: Het systeem MUST documentatie opleveren in Markdown onder `/docs` voor minimaal applicatiestart, architectuur en datamodel.
 - **FR-044**: Het systeem MUST diagrammen in de documentatie in Mermaid notatie vastleggen.
 - **FR-045**: Het systeem MUST worden ontwikkeld als een enkele codebase die meerdere toernooien kan ondersteunen.
 - **FR-046**: Het systeem MUST testbaar zijn met unit tests voor domeinlogica en Playwright-validatie voor functionele UI-flows.
 - **FR-047**: Het systeem MUST een beschermde beheerworkflow bieden voor migraties en handmatige standherberekening wanneer CLI/SSH op shared hosting niet beschikbaar is.
+- **FR-047a**: Het systeem MUST via deze beschermde beheerworkflow minimaal database-migraties kunnen uitvoeren en een handmatige standherberekening kunnen starten.
 - **FR-048**: Het systeem MUST beheerders bonusvragen laten aanmaken, wijzigen, activeren en deactiveren per competitie.
 - **FR-049**: Het systeem MUST deelnemers bonusvragen laten beantwoorden als onderdeel van hun definitieve inzending.
 - **FR-050**: Het systeem MUST bonusvraag-antwoorden valideren en meenemen in data-gedreven puntentelling.
-- **FR-051**: Het systeem MUST groepen, speellocaties en wedstrijden beheerbaar maken via beheerfunctionaliteit of expliciet ondersteunde import.
+- **FR-051**: Het systeem MUST groepen, speellocaties en wedstrijden beheerbaar maken via de beheer-UI; expliciet ondersteunde import mag aanvullend worden aangeboden maar vervangt de beheer-UI niet.
 - **FR-052**: Het systeem MUST expliciet vastleggen hoe een gebruiker deelnemer van een competitie wordt.
+- **FR-052a**: Het systeem MUST toestaan dat een geregistreerde gebruiker zichzelf inschrijft voor een competitie met status `open`.
+- **FR-052b**: Het systeem MUST toestaan dat een beheerder een bestaande geregistreerde gebruiker handmatig aan een competitie koppelt.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -163,13 +187,28 @@ Als gast of deelnemer wil ik publieke competitie-informatie, uitslagen en stande
 - **Standensnapshot**: Een vastgelegd momentbeeld van de rangorde en puntenstanden, gebruikt om positie-veranderingen te tonen.
 - **Betalingsstatus**: De betaalindicatie van een deelnemer binnen een competitie, gebruikt voor markering of deelnamebeperking.
 
+## Dependencies & Assumptions
+
+- Actieve competitie-entiteiten vormen de enige geldige bron voor entity-gebaseerde bonusvragen en knock-out selecties.
+- CSV-import gebruikt expliciet ondersteunde, door beheerders aangeleverde CSV-bestanden; de importtemplate en validatieregels bepalen welke kolommen verplicht zijn.
+- Competitielogo's worden opgeslagen op het serverfilesystem in een niet-uitvoerbare uploadmap en alleen via opgeslagen relatieve paden gekoppeld.
+- Publieke en private standenweergaven gebruiken altijd snapshotdata als bron voor rangorde en bewegingsindicatoren.
+
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Een deelnemer kan een volledige voorspelling voor een actieve competitie in een sessie afronden en definitief indienen zonder incomplete secties achter te laten.
+- **SC-001**: Een deelnemer kan voor een `open` competitie alle actieve secties in een enkele authenticated sessie afronden en definitief indienen; bij een onvolledige poging blokkeert het systeem de inzending en benoemt het de ontbrekende onderdelen.
 - **SC-002**: Na het verstrijken van de uiterste inleverdatum accepteert het systeem in 100% van de gevallen geen nieuwe of gewijzigde voorspellingen meer.
-- **SC-003**: Beheerders kunnen zonder codewijziging competities, secties, puntwaarden en prijsverdeling configureren voor een nieuw toernooi.
-- **SC-004**: Publieke bezoekers kunnen zonder account de actuele competitie-informatie en standen bekijken voor hoofdcompetities en sub-competities.
-- **SC-005**: Standenlijsten tonen reproduceerbare positie-indicatoren op basis van snapshots, inclusief gevallen gestegen, gedaald, gelijk en nieuw.
+- **SC-003**: Beheerders kunnen zonder codewijziging voor een nieuw toernooi competities, secties, puntwaarden, prijsverdeling, bonusvragen, knock-out rondes, groepen, speelsteden en wedstrijden configureren.
+- **SC-004**: Publieke bezoekers kunnen zonder account de actuele competitie-informatie en standen bekijken voor hoofdcompetities en sub-competities, met alleen betaalde deelnemers in publieke standen en tellingen.
+- **SC-005**: Standenlijsten tonen voor zowel hoofdcompetities als sub-competities reproduceerbare positie-indicatoren op basis van snapshots, inclusief gevallen gestegen, gedaald, gelijk en nieuw.
 - **SC-006**: De oplossing blijft bruikbaar als een enkele codebase voor meerdere toernooien met configureerbare regels en uitbreidbare secties.
+
+## Requirement Traceability
+
+| Story | Kernfunctionaliteit | Belangrijkste requirements | Meetbare uitkomsten |
+|-------|----------------------|----------------------------|---------------------|
+| User Story 1 - Deelnemer levert volledige voorspelling in | Registratie/inloggen, volledige wedstrijd- en knock-outvoorspellingen, bonusvragen, definitieve inzending, deadline-locking | FR-002, FR-008, FR-008a, FR-012, FR-013, FR-014, FR-021, FR-022, FR-023, FR-024, FR-025, FR-026, FR-037, FR-049, FR-050, FR-052a | SC-001, SC-002 |
+| User Story 2 - Beheerder beheert competities, deelnemers en puntregels | Competitielifecycle, secties en puntregels, bonusbeheer, betaling, enrollment, knock-outconfiguratie, beheer van groepen/speelsteden/wedstrijden, onderhoud zonder CLI | FR-004, FR-005, FR-006, FR-007, FR-008, FR-009, FR-010, FR-015, FR-016, FR-017, FR-018, FR-019, FR-020, FR-028, FR-029, FR-036, FR-047, FR-047a, FR-048, FR-051, FR-052, FR-052b | SC-003, SC-006 |
+| User Story 3 - Gast en deelnemer bekijken publieke standen en competitie-informatie | Publieke competitie-overzichten, resultaten, snapshot-gedreven standen, sub-competities en bewegingsindicatoren | FR-001, FR-011, FR-030, FR-031, FR-032, FR-032a, FR-033, FR-034, FR-035, FR-038 | SC-004, SC-005 |

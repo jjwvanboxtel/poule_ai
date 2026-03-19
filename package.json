@@ -1,8 +1,11 @@
 {
   "scripts": {
-    "start:mcp": "pwsh -File .specify\\scripts\\powershell\\start-playwright-mcp.ps1 -Port 9222"
+    "start:mcp": "pwsh -File .specify\\scripts\\powershell\\start-playwright-mcp.ps1 -Port 9222",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.0",
     "playwright-mcp": "^0.0.19"
   }
 }
