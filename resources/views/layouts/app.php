@@ -21,6 +21,9 @@
         <div class="navbar-nav ms-auto">
             <?php if ($session->get('user_id')): ?>
                 <a class="nav-link" href="/dashboard">Dashboard</a>
+                <?php if ($session->get('user_role') === 'admin'): ?>
+                    <a class="nav-link" href="/admin">Admin</a>
+                <?php endif; ?>
                 <form method="POST" action="/logout" class="d-inline">
                     <input type="hidden" name="<?= htmlspecialchars($session->get('csrf_token_name', '_token'), ENT_QUOTES, 'UTF-8') ?>"
                            value="<?= htmlspecialchars($session->get('csrf_token', ''), ENT_QUOTES, 'UTF-8') ?>">

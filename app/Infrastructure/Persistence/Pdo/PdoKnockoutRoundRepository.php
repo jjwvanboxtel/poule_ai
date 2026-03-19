@@ -66,4 +66,31 @@ final class PdoKnockoutRoundRepository extends AbstractPdoRepository implements 
             ),
         );
     }
+
+    public function saveRound(int $competitionId, string $label, int $roundOrder, int $teamSlotCount, bool $isActive): int
+    {
+        $this->execute(
+            'INSERT INTO knockout_rounds (competition_id, label, round_order, team_slot_count, is_active)
+             VALUES (?, ?, ?, ?, ?)',
+            [$competitionId, $label, $roundOrder, $teamSlotCount, $isActive ? 1 : 0],
+        );
+        return $this->lastInsertId();
+    }
+
+    public function updateRound(int $id, string $label, int $roundOrder, int $teamSlotCount, bool $isActive): void
+    {
+        $this->execute(
+            'UPDATE knockout_rounds SET label = ?, round_order = ?, team_slot_count = ?, is_active = ? WHERE id = ?',
+            [$label, $roundOrder, $teamSlotCount, $isActive ? 1 : 0, $id],
+        );
+    }
+
+    /** @return list<array<string, mixed>> */
+    public function findAllRounds(int $competitionId): array
+    {
+        return $this->fetchAll(
+            'SELECT * FROM knockout_rounds WHERE competition_id = ? ORDER BY round_order ASC',
+            [$competitionId],
+        );
+    }
 }

@@ -1,5 +1,16 @@
 <?php declare(strict_types=1);
 
+use App\Application\Auth\UpdateUserRoleService;
+use App\Application\Auth\UpdateUserStatusService;
+use App\Application\Competitions\CreateCompetitionService;
+use App\Application\Competitions\EnrollParticipantService;
+use App\Application\Competitions\UpdateBonusQuestionsService;
+use App\Application\Competitions\UpdateCompetitionRulesService;
+use App\Application\Competitions\UpdateCompetitionSectionsService;
+use App\Application\Competitions\UpdateCompetitionService;
+use App\Application\Competitions\UpdateKnockoutRoundsService;
+use App\Application\Competitions\UpdateParticipantPaymentStatusService;
+use App\Application\Imports\EntityCsvImportService;
 use App\Application\Predictions\BonusAnswerRepositoryInterface;
 use App\Application\Predictions\BonusAnswerValidator;
 use App\Application\Predictions\CompetitionDataProviderInterface;
@@ -15,13 +26,20 @@ use App\Http\Controllers\Participant\DashboardController;
 use App\Http\Controllers\Participant\PredictionController;
 use App\Http\ViewModels\PredictionFormViewModel;
 use App\Infrastructure\Persistence\Pdo\ConnectionFactory;
+use App\Infrastructure\Persistence\Pdo\PdoAdminAuditLogRepository;
 use App\Infrastructure\Persistence\Pdo\PdoBonusAnswerRepository;
+use App\Infrastructure\Persistence\Pdo\PdoCompetitionParticipantRepository;
 use App\Infrastructure\Persistence\Pdo\PdoCompetitionRepository;
+use App\Infrastructure\Persistence\Pdo\PdoCompetitionRuleRepository;
+use App\Infrastructure\Persistence\Pdo\PdoCompetitionSectionRepository;
 use App\Infrastructure\Persistence\Pdo\PdoKnockoutRoundRepository;
+use App\Infrastructure\Persistence\Pdo\PdoMatchManagementRepository;
 use App\Infrastructure\Persistence\Pdo\PdoMatchPredictionRepository;
+use App\Infrastructure\Persistence\Pdo\PdoMatchResultRepository;
 use App\Infrastructure\Persistence\Pdo\PdoPredictionSubmissionRepository;
 use App\Infrastructure\Persistence\Pdo\PdoUserRepository;
 use App\Infrastructure\Security\SessionAuthenticator;
+use App\Infrastructure\Storage\LogoStorage;
 use App\Support\Container;
 use App\Support\Sessions\SessionManager;
 use App\Support\View\ViewRenderer;
@@ -160,6 +178,87 @@ $container->bind(DashboardController::class, static function (Container $c): Das
 
 $container->bind(PredictionController::class, static function (Container $c): PredictionController {
     return new PredictionController($c);
+});
+
+$container->singleton(PdoCompetitionSectionRepository::class, static function (Container $c): PdoCompetitionSectionRepository {
+    return new PdoCompetitionSectionRepository($c->get(\PDO::class));
+});
+
+$container->singleton(PdoCompetitionRuleRepository::class, static function (Container $c): PdoCompetitionRuleRepository {
+    return new PdoCompetitionRuleRepository($c->get(\PDO::class));
+});
+
+$container->singleton(PdoCompetitionParticipantRepository::class, static function (Container $c): PdoCompetitionParticipantRepository {
+    return new PdoCompetitionParticipantRepository($c->get(\PDO::class));
+});
+
+$container->singleton(PdoAdminAuditLogRepository::class, static function (Container $c): PdoAdminAuditLogRepository {
+    return new PdoAdminAuditLogRepository($c->get(\PDO::class));
+});
+
+$container->singleton(PdoMatchResultRepository::class, static function (Container $c): PdoMatchResultRepository {
+    return new PdoMatchResultRepository($c->get(\PDO::class));
+});
+
+$container->singleton(PdoMatchManagementRepository::class, static function (Container $c): PdoMatchManagementRepository {
+    return new PdoMatchManagementRepository($c->get(\PDO::class));
+});
+
+$container->singleton(LogoStorage::class, static function (Container $c): LogoStorage {
+    return new LogoStorage(BASE_PATH);
+});
+
+$container->singleton(CreateCompetitionService::class, static function (Container $c): CreateCompetitionService {
+    return new CreateCompetitionService($c->get(PdoCompetitionRepository::class));
+});
+
+$container->singleton(UpdateCompetitionService::class, static function (Container $c): UpdateCompetitionService {
+    return new UpdateCompetitionService($c->get(PdoCompetitionRepository::class));
+});
+
+$container->singleton(UpdateCompetitionSectionsService::class, static function (Container $c): UpdateCompetitionSectionsService {
+    return new UpdateCompetitionSectionsService($c->get(PdoCompetitionSectionRepository::class));
+});
+
+$container->singleton(UpdateCompetitionRulesService::class, static function (Container $c): UpdateCompetitionRulesService {
+    return new UpdateCompetitionRulesService($c->get(PdoCompetitionRuleRepository::class));
+});
+
+$container->singleton(UpdateParticipantPaymentStatusService::class, static function (Container $c): UpdateParticipantPaymentStatusService {
+    return new UpdateParticipantPaymentStatusService($c->get(PdoCompetitionParticipantRepository::class));
+});
+
+$container->singleton(EnrollParticipantService::class, static function (Container $c): EnrollParticipantService {
+    return new EnrollParticipantService(
+        $c->get(PdoCompetitionRepository::class),
+        $c->get(PdoCompetitionParticipantRepository::class),
+    );
+});
+
+$container->singleton(UpdateUserRoleService::class, static function (Container $c): UpdateUserRoleService {
+    return new UpdateUserRoleService(
+        $c->get(PdoUserRepository::class),
+        $c->get(PdoAdminAuditLogRepository::class),
+    );
+});
+
+$container->singleton(UpdateUserStatusService::class, static function (Container $c): UpdateUserStatusService {
+    return new UpdateUserStatusService(
+        $c->get(PdoUserRepository::class),
+        $c->get(PdoAdminAuditLogRepository::class),
+    );
+});
+
+$container->singleton(UpdateKnockoutRoundsService::class, static function (Container $c): UpdateKnockoutRoundsService {
+    return new UpdateKnockoutRoundsService($c->get(PdoKnockoutRoundRepository::class));
+});
+
+$container->singleton(UpdateBonusQuestionsService::class, static function (Container $c): UpdateBonusQuestionsService {
+    return new UpdateBonusQuestionsService($c->get(\PDO::class));
+});
+
+$container->singleton(EntityCsvImportService::class, static function (Container $c): EntityCsvImportService {
+    return new EntityCsvImportService($c->get(\PDO::class));
 });
 
 return $container;
