@@ -2,10 +2,12 @@
 
 namespace App\Infrastructure\Persistence\Pdo;
 
+use App\Application\Auth\UserRepositoryInterface;
+use App\Application\Competitions\UserReadRepositoryInterface;
 use App\Domain\User\User;
 use App\Domain\User\UserRole;
 
-final class PdoUserRepository extends AbstractPdoRepository
+final class PdoUserRepository extends AbstractPdoRepository implements UserRepositoryInterface, UserReadRepositoryInterface
 {
     public function findById(int $id): ?User
     {
