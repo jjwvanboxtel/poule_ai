@@ -43,12 +43,9 @@ final class LogoStorage
         }
 
         $ext = $extMap[$mime];
-        $filename = preg_replace('/[^a-z0-9\-_]/', '-', strtolower($slug)) . '.' . $ext;
+        $slugPart = preg_replace('/[^a-z0-9\-_]/', '-', strtolower($slug)) ?? 'file';
+        $filename = $slugPart . '.' . $ext;
         $destination = $this->storageDir . '/' . $filename;
-
-        if ($filename === null) {
-            throw new \RuntimeException('Failed to generate valid filename.');
-        }
 
         if (!move_uploaded_file($tmpPath, $destination)) {
             throw new \RuntimeException('Failed to move uploaded file.');

@@ -2,14 +2,14 @@
 
 namespace App\Application\Competitions;
 
-use App\Infrastructure\Persistence\Pdo\PdoCompetitionParticipantRepository;
-use App\Infrastructure\Persistence\Pdo\PdoCompetitionRepository;
+use App\Application\Competitions\CompetitionParticipantRepositoryInterface;
+use App\Application\Competitions\CompetitionRepositoryInterface;
 
 final class EnrollParticipantService
 {
     public function __construct(
-        private readonly PdoCompetitionRepository $competitions,
-        private readonly PdoCompetitionParticipantRepository $participants,
+        private readonly CompetitionRepositoryInterface $competitions,
+        private readonly CompetitionParticipantRepositoryInterface $participants,
     ) {}
 
     public function enroll(int $competitionId, int $userId): void

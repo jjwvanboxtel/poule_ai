@@ -35,12 +35,8 @@ final class EntityCsvImportService
 
                 $entityType = is_string($row['entity_type'] ?? null) ? $row['entity_type'] : 'other';
                 $displayName = is_string($row['display_name'] ?? null) ? trim($row['display_name']) : '';
-                $shortCode = (isset($row['short_code']) && is_string($row['short_code']) && $row['short_code'] !== '')
-                    ? $row['short_code']
-                    : null;
-                $nationality = (isset($row['nationality']) && is_string($row['nationality']) && $row['nationality'] !== '')
-                    ? $row['nationality']
-                    : null;
+                $shortCode = isset($row['short_code']) && $row['short_code'] !== '' ? $row['short_code'] : null;
+                $nationality = isset($row['nationality']) && $row['nationality'] !== '' ? $row['nationality'] : null;
                 $isActive = !isset($row['is_active']) || $row['is_active'] === '' || $row['is_active'] === '1' ? 1 : 0;
 
                 $stmt->execute([$competitionId, $entityType, $displayName, $shortCode, $nationality, $isActive]);

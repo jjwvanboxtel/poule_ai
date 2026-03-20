@@ -2,11 +2,11 @@
 
 namespace App\Application\Competitions;
 
-use App\Infrastructure\Persistence\Pdo\PdoCompetitionRepository;
+use App\Application\Competitions\CompetitionRepositoryInterface;
 
 final class UpdateCompetitionService
 {
-    public function __construct(private readonly PdoCompetitionRepository $competitions) {}
+    public function __construct(private readonly CompetitionRepositoryInterface $competitions) {}
 
     /** @param array<string, mixed> $data */
     public function update(int $competitionId, array $data): void

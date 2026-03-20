@@ -5,22 +5,22 @@ namespace Tests\Unit\Competitions;
 use App\Application\Competitions\EnrollParticipantService;
 use App\Domain\Competition\Competition;
 use App\Domain\Competition\CompetitionStatus;
-use App\Infrastructure\Persistence\Pdo\PdoCompetitionParticipantRepository;
-use App\Infrastructure\Persistence\Pdo\PdoCompetitionRepository;
+use App\Application\Competitions\CompetitionParticipantRepositoryInterface;
+use App\Application\Competitions\CompetitionRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class EnrollParticipantServiceTest extends TestCase
 {
-    private PdoCompetitionRepository&MockObject $competitions;
-    private PdoCompetitionParticipantRepository&MockObject $participants;
+    private CompetitionRepositoryInterface&MockObject $competitions;
+    private CompetitionParticipantRepositoryInterface&MockObject $participants;
     private EnrollParticipantService $service;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->competitions = $this->createMock(PdoCompetitionRepository::class);
-        $this->participants = $this->createMock(PdoCompetitionParticipantRepository::class);
+        $this->competitions = $this->createMock(CompetitionRepositoryInterface::class);
+        $this->participants = $this->createMock(CompetitionParticipantRepositoryInterface::class);
         $this->service = new EnrollParticipantService($this->competitions, $this->participants);
     }
 

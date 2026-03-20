@@ -2,12 +2,13 @@
 
 namespace App\Infrastructure\Persistence\Pdo;
 
+use App\Application\Competitions\CompetitionRepositoryInterface;
 use App\Application\Predictions\CompetitionDataProviderInterface;
 use App\Domain\Competition\Competition;
 use App\Domain\Competition\CompetitionSection;
 use App\Domain\Competition\CompetitionStatus;
 
-final class PdoCompetitionRepository extends AbstractPdoRepository implements CompetitionDataProviderInterface
+final class PdoCompetitionRepository extends AbstractPdoRepository implements CompetitionDataProviderInterface, CompetitionRepositoryInterface
 {
     public function findById(int $id): ?Competition
     {

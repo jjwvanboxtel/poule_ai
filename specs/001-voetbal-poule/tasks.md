@@ -91,29 +91,29 @@ description: "Task list for feature implementation"
 
 ### Tests for User Story 2
 
-- [ ] T025 [P] [US2] Add unit tests for competition activation, prize distribution, enrollment, and last-active-admin protection in `tests/Unit/Competitions/UpdateCompetitionServiceTest.php`, `tests/Unit/Competitions/EnrollParticipantServiceTest.php`, and `tests/Unit/Auth/AdminRoleGuardTest.php`
+- [X] T025 [P] [US2] Add unit tests for competition activation, prize distribution, enrollment, and last-active-admin protection in `tests/Unit/Competitions/UpdateCompetitionServiceTest.php`, `tests/Unit/Competitions/EnrollParticipantServiceTest.php`, and `tests/Unit/Auth/AdminRoleGuardTest.php`
 - [ ] T026 [P] [US2] Add HTTP contract tests for admin competition, bonus-question, payment, match-management, maintenance, and CSV import routes in `tests/Contract/AdminCompetitionRoutesTest.php`, `tests/Contract/AdminBonusQuestionRoutesTest.php`, `tests/Contract/AdminMatchManagementRoutesTest.php`, and `tests/Contract/CsvImportRoutesTest.php`
 - [ ] T027 [P] [US2] Add Playwright coverage for admin competition-management, enrollment, and maintenance flows in `tests/E2E/admin-competition-management.spec.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T028 [P] [US2] Create competition-management and entity-catalog tables in `database/migrations/003_create_competition_management_tables.php` and `database/migrations/004_create_catalog_tables.php`
-- [ ] T029 [P] [US2] Create bonus-question tables in `database/migrations/005_create_bonus_question_tables.php`
-- [ ] T030 [P] [US2] Create group, venue, and match management tables in `database/migrations/006_create_match_management_tables.php`
-- [ ] T031 [P] [US2] Implement competition, section, rule, and participant-management services in `app/Application/Competitions/CreateCompetitionService.php`, `app/Application/Competitions/UpdateCompetitionService.php`, `app/Application/Competitions/UpdateCompetitionSectionsService.php`, `app/Application/Competitions/UpdateCompetitionRulesService.php`, and `app/Application/Competitions/UpdateParticipantPaymentStatusService.php`
-- [ ] T032 [US2] Implement admin bonus-question management, including entity-backed option configuration for dropdown-based questions, in `app/Application/Competitions/UpdateBonusQuestionsService.php`, `app/Http/Controllers/Admin/BonusQuestionController.php`, and `resources/views/admin/competitions/bonus-questions.php`
-- [ ] T033 [US2] Implement participant enrollment flow in `app/Application/Competitions/EnrollParticipantService.php` and `app/Http/Controllers/Admin/CompetitionEnrollmentController.php`
-- [ ] T034 [US2] Implement repositories and logo file storage for admin-managed competition data in `app/Infrastructure/Persistence/Pdo/PdoCompetitionSectionRepository.php`, `app/Infrastructure/Persistence/Pdo/PdoCompetitionRuleRepository.php`, `app/Infrastructure/Persistence/Pdo/PdoCompetitionParticipantRepository.php`, and `app/Infrastructure/Storage/LogoStorage.php`
-- [ ] T035 [US2] Implement admin competition create/edit/list controllers and SSR forms in `app/Http/Controllers/Admin/CompetitionController.php`, `resources/views/admin/competitions/index.php`, `resources/views/admin/competitions/create.php`, and `resources/views/admin/competitions/edit.php`
-- [ ] T036 [US2] Implement participant payment management UI with unpaid markers in `app/Http/Controllers/Admin/CompetitionParticipantController.php` and `resources/views/admin/competitions/participants.php`
-- [ ] T037 [US2] Implement last-active-admin guards for role and status mutations in `app/Application/Auth/UpdateUserRoleService.php`, `app/Application/Auth/UpdateUserStatusService.php`, `app/Http/Controllers/Admin/UserManagementController.php`, and `app/Infrastructure/Persistence/Pdo/PdoAdminAuditLogRepository.php`
-- [ ] T038 [US2] Implement dynamic knock-out round configuration and slot validation in `app/Domain/Competition/KnockoutRound.php`, `app/Domain/Competition/KnockoutRoundTeam.php`, `app/Application/Competitions/UpdateKnockoutRoundsService.php`, and `resources/views/admin/competitions/knockout-rounds.php`
-- [ ] T039 [US2] Implement CSV entity import parsing, validation, and transactional commit flow in `app/Application/Imports/EntityCsvImportService.php`, `app/Application/Imports/Csv/EntityCsvParser.php`, `app/Application/Imports/Csv/EntityCsvValidator.php`, `app/Http/Controllers/Admin/EntityImportController.php`, and `resources/views/admin/imports/entities.php`
-- [ ] T040 [US2] Implement group, venue, and match administration in `app/Http/Controllers/Admin/MatchManagementController.php` and `resources/views/admin/matches/`
-- [ ] T041 [US2] Implement protected maintenance workflow for migrations and recalculation in `app/Http/Controllers/Admin/MaintenanceController.php` and `resources/views/admin/maintenance/index.php`
-- [ ] T042 [US2] Implement admin match-result entry in `app/Http/Controllers/Admin/MatchResultController.php` and `resources/views/admin/results/edit.php`
-- [ ] T043 [US2] Implement manual standings recalculation action in `app/Http/Controllers/Admin/StandingsRecalculationController.php`
-- [ ] T044 [US2] Wire admin routes, authorization middleware, and CSRF-protected handlers in `bootstrap/app.php` and `app/Http/Middleware/RequireAdmin.php`
+- [X] T028 [P] [US2] Create competition-management and entity-catalog tables in `database/migrations/003_create_competition_management_tables.php` and `database/migrations/004_create_catalog_tables.php`
+- [X] T029 [P] [US2] Create bonus-question tables in `database/migrations/005_create_bonus_question_tables.php`
+- [X] T030 [P] [US2] Create group, venue, and match management tables in `database/migrations/006_create_match_management_tables.php`
+- [X] T031 [P] [US2] Implement competition, section, rule, and participant-management services in `app/Application/Competitions/CreateCompetitionService.php`, `app/Application/Competitions/UpdateCompetitionService.php`, `app/Application/Competitions/UpdateCompetitionSectionsService.php`, `app/Application/Competitions/UpdateCompetitionRulesService.php`, and `app/Application/Competitions/UpdateParticipantPaymentStatusService.php`
+- [X] T032 [US2] Implement admin bonus-question management, including entity-backed option configuration for dropdown-based questions, in `app/Application/Competitions/UpdateBonusQuestionsService.php`, `app/Http/Controllers/Admin/BonusQuestionController.php`, and `resources/views/admin/competitions/bonus-questions.php`
+- [X] T033 [US2] Implement participant enrollment flow in `app/Application/Competitions/EnrollParticipantService.php` and `app/Http/Controllers/Admin/CompetitionEnrollmentController.php`
+- [X] T034 [US2] Implement repositories and logo file storage for admin-managed competition data in `app/Infrastructure/Persistence/Pdo/PdoCompetitionSectionRepository.php`, `app/Infrastructure/Persistence/Pdo/PdoCompetitionRuleRepository.php`, `app/Infrastructure/Persistence/Pdo/PdoCompetitionParticipantRepository.php`, and `app/Infrastructure/Storage/LogoStorage.php`
+- [X] T035 [US2] Implement admin competition create/edit/list controllers and SSR forms in `app/Http/Controllers/Admin/CompetitionController.php`, `resources/views/admin/competitions/index.php`, `resources/views/admin/competitions/create.php`, and `resources/views/admin/competitions/edit.php`
+- [X] T036 [US2] Implement participant payment management UI with unpaid markers in `app/Http/Controllers/Admin/CompetitionParticipantController.php` and `resources/views/admin/competitions/participants.php`
+- [X] T037 [US2] Implement last-active-admin guards for role and status mutations in `app/Application/Auth/UpdateUserRoleService.php`, `app/Application/Auth/UpdateUserStatusService.php`, `app/Http/Controllers/Admin/UserManagementController.php`, and `app/Infrastructure/Persistence/Pdo/PdoAdminAuditLogRepository.php`
+- [X] T038 [US2] Implement dynamic knock-out round configuration and slot validation in `app/Domain/Competition/KnockoutRound.php`, `app/Domain/Competition/KnockoutRoundTeam.php`, `app/Application/Competitions/UpdateKnockoutRoundsService.php`, and `resources/views/admin/competitions/knockout-rounds.php`
+- [X] T039 [US2] Implement CSV entity import parsing, validation, and transactional commit flow in `app/Application/Imports/EntityCsvImportService.php`, `app/Application/Imports/Csv/EntityCsvParser.php`, `app/Application/Imports/Csv/EntityCsvValidator.php`, `app/Http/Controllers/Admin/EntityImportController.php`, and `resources/views/admin/imports/entities.php`
+- [X] T040 [US2] Implement group, venue, and match administration in `app/Http/Controllers/Admin/MatchManagementController.php` and `resources/views/admin/matches/`
+- [X] T041 [US2] Implement protected maintenance workflow for migrations and recalculation in `app/Http/Controllers/Admin/MaintenanceController.php` and `resources/views/admin/maintenance/index.php`
+- [X] T042 [US2] Implement admin match-result entry in `app/Http/Controllers/Admin/MatchResultController.php` and `resources/views/admin/results/edit.php`
+- [X] T043 [US2] Implement manual standings recalculation action in `app/Http/Controllers/Admin/StandingsRecalculationController.php`
+- [X] T044 [US2] Wire admin routes, authorization middleware, and CSRF-protected handlers in `bootstrap/app.php` and `app/Http/Middleware/RequireAdmin.php`
 
 **Checkpoint**: Administrators can manage competitions and related reference data entirely through SSR screens while guarded invariants remain enforced server-side.
 

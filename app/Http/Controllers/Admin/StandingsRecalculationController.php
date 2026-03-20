@@ -6,25 +6,20 @@ use App\Http\Requests\Request;
 use App\Infrastructure\Persistence\Pdo\PdoCompetitionRepository;
 use App\Support\Container;
 use App\Support\Sessions\SessionManager;
-use App\Support\View\ViewRenderer;
 
 final class StandingsRecalculationController
 {
-    private readonly ViewRenderer $renderer;
     private readonly SessionManager $session;
     private readonly PdoCompetitionRepository $competitions;
 
     public function __construct(Container $container)
     {
-        $renderer = $container->get(ViewRenderer::class);
         $session = $container->get(SessionManager::class);
         $competitions = $container->get(PdoCompetitionRepository::class);
 
-        if (!$renderer instanceof ViewRenderer) throw new \RuntimeException('ViewRenderer invalid');
         if (!$session instanceof SessionManager) throw new \RuntimeException('Session invalid');
         if (!$competitions instanceof PdoCompetitionRepository) throw new \RuntimeException('Competitions invalid');
 
-        $this->renderer = $renderer;
         $this->session = $session;
         $this->competitions = $competitions;
     }

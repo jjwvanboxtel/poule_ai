@@ -2,7 +2,9 @@
 
 namespace App\Infrastructure\Persistence\Pdo;
 
-final class PdoAdminAuditLogRepository extends AbstractPdoRepository
+use App\Application\Auth\AdminAuditLogRepositoryInterface;
+
+final class PdoAdminAuditLogRepository extends AbstractPdoRepository implements AdminAuditLogRepositoryInterface
 {
     /** @param array<string, mixed>|null $details */
     public function log(int $userId, string $action, string $entityType, ?int $entityId, ?array $details): void
@@ -27,6 +29,6 @@ final class PdoAdminAuditLogRepository extends AbstractPdoRepository
         $stmt->bindValue(':lim', $limit, \PDO::PARAM_INT);
         $stmt->execute();
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        return is_array($rows) ? array_values(array_filter($rows, static fn (mixed $r): bool => is_array($r))) : [];
+        return array_values(array_filter($rows, static fn (mixed $r): bool => is_array($r)));
     }
 }

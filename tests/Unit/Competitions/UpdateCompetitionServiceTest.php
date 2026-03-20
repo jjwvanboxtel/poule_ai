@@ -5,19 +5,19 @@ namespace Tests\Unit\Competitions;
 use App\Application\Competitions\UpdateCompetitionService;
 use App\Domain\Competition\Competition;
 use App\Domain\Competition\CompetitionStatus;
-use App\Infrastructure\Persistence\Pdo\PdoCompetitionRepository;
+use App\Application\Competitions\CompetitionRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class UpdateCompetitionServiceTest extends TestCase
 {
-    private PdoCompetitionRepository&MockObject $competitions;
+    private CompetitionRepositoryInterface&MockObject $competitions;
     private UpdateCompetitionService $service;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->competitions = $this->createMock(PdoCompetitionRepository::class);
+        $this->competitions = $this->createMock(CompetitionRepositoryInterface::class);
         $this->service = new UpdateCompetitionService($this->competitions);
     }
 

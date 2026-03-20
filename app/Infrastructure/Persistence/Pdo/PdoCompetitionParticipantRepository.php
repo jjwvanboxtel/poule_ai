@@ -2,7 +2,9 @@
 
 namespace App\Infrastructure\Persistence\Pdo;
 
-final class PdoCompetitionParticipantRepository extends AbstractPdoRepository
+use App\Application\Competitions\CompetitionParticipantRepositoryInterface;
+
+final class PdoCompetitionParticipantRepository extends AbstractPdoRepository implements CompetitionParticipantRepositoryInterface
 {
     /** @return list<array<string, mixed>> */
     public function findByCompetition(int $competitionId): array

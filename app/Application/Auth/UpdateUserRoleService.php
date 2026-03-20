@@ -4,14 +4,14 @@ namespace App\Application\Auth;
 
 use App\Domain\User\User;
 use App\Domain\User\UserRole;
-use App\Infrastructure\Persistence\Pdo\PdoAdminAuditLogRepository;
-use App\Infrastructure\Persistence\Pdo\PdoUserRepository;
+use App\Application\Auth\AdminAuditLogRepositoryInterface;
+use App\Application\Auth\UserRepositoryInterface;
 
 final class UpdateUserRoleService
 {
     public function __construct(
-        private readonly PdoUserRepository $users,
-        private readonly PdoAdminAuditLogRepository $auditLog,
+        private readonly UserRepositoryInterface $users,
+        private readonly AdminAuditLogRepositoryInterface $auditLog,
     ) {}
 
     public function updateRole(int $targetUserId, string $newRole, int $actingAdminUserId): void

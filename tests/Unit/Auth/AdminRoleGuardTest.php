@@ -6,23 +6,23 @@ use App\Application\Auth\UpdateUserRoleService;
 use App\Application\Auth\UpdateUserStatusService;
 use App\Domain\User\User;
 use App\Domain\User\UserRole;
-use App\Infrastructure\Persistence\Pdo\PdoAdminAuditLogRepository;
-use App\Infrastructure\Persistence\Pdo\PdoUserRepository;
+use App\Application\Auth\AdminAuditLogRepositoryInterface;
+use App\Application\Auth\UserRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class AdminRoleGuardTest extends TestCase
 {
-    private PdoUserRepository&MockObject $users;
-    private PdoAdminAuditLogRepository&MockObject $auditLog;
+    private UserRepositoryInterface&MockObject $users;
+    private AdminAuditLogRepositoryInterface&MockObject $auditLog;
     private UpdateUserRoleService $roleService;
     private UpdateUserStatusService $statusService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->users = $this->createMock(PdoUserRepository::class);
-        $this->auditLog = $this->createMock(PdoAdminAuditLogRepository::class);
+        $this->users = $this->createMock(UserRepositoryInterface::class);
+        $this->auditLog = $this->createMock(AdminAuditLogRepositoryInterface::class);
         $this->roleService = new UpdateUserRoleService($this->users, $this->auditLog);
         $this->statusService = new UpdateUserStatusService($this->users, $this->auditLog);
     }

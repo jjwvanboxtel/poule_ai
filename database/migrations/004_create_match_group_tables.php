@@ -30,16 +30,14 @@ return new class {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
         );
 
-        // Add columns to matches if they don't exist
-        try {
-            $pdo->exec('ALTER TABLE matches ADD COLUMN IF NOT EXISTS group_id INT UNSIGNED NULL AFTER competition_id');
-        } catch (\PDOException $e) {
-            // Column may already exist
+        // Add columns to matches if they don't exist (using SHOW COLUMNS for MySQL compatibility)
+        $hasGroupId = $pdo->query("SHOW COLUMNS FROM matches LIKE 'group_id'")->rowCount() > 0;
+        if (!$hasGroupId) {
+            $pdo->exec('ALTER TABLE matches ADD COLUMN group_id INT UNSIGNED NULL AFTER competition_id');
         }
-        try {
-            $pdo->exec('ALTER TABLE matches ADD COLUMN IF NOT EXISTS venue_id INT UNSIGNED NULL AFTER group_id');
-        } catch (\PDOException $e) {
-            // Column may already exist
+        $hasVenueId = $pdo->query("SHOW COLUMNS FROM matches LIKE 'venue_id'")->rowCount() > 0;
+        if (!$hasVenueId) {
+            $pdo->exec('ALTER TABLE matches ADD COLUMN venue_id INT UNSIGNED NULL AFTER group_id');
         }
         try {
             $pdo->exec('ALTER TABLE matches ADD CONSTRAINT fk_matches_group_id FOREIGN KEY (group_id) REFERENCES match_groups(id) ON DELETE SET NULL');
@@ -63,13 +61,13 @@ return new class {
             $pdo->exec('ALTER TABLE matches DROP FOREIGN KEY fk_matches_venue_id');
         } catch (\PDOException $e) {
         }
-        try {
-            $pdo->exec('ALTER TABLE matches DROP COLUMN IF EXISTS group_id');
-        } catch (\PDOException $e) {
+        $hasGroupId = $pdo->query("SHOW COLUMNS FROM matches LIKE 'group_id'")->rowCount() > 0;
+        if ($hasGroupId) {
+            $pdo->exec('ALTER TABLE matches DROP COLUMN group_id');
         }
-        try {
-            $pdo->exec('ALTER TABLE matches DROP COLUMN IF EXISTS venue_id');
-        } catch (\PDOException $e) {
+        $hasVenueId = $pdo->query("SHOW COLUMNS FROM matches LIKE 'venue_id'")->rowCount() > 0;
+        if ($hasVenueId) {
+            $pdo->exec('ALTER TABLE matches DROP COLUMN venue_id');
         }
         $pdo->exec('DROP TABLE IF EXISTS match_venues');
         $pdo->exec('DROP TABLE IF EXISTS match_groups');

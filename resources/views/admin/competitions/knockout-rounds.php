@@ -48,9 +48,10 @@
                         </tr>
                     <?php endforeach; ?>
                     <?php $newIdx = count($rounds); ?>
+                    <?php $nextOrder = $rounds === [] ? 0 : (int) max(array_column($rounds, 'round_order')) + 1; ?>
                     <tr>
                         <td><input type="text" class="form-control form-control-sm" name="rounds[<?= $newIdx ?>][label]" placeholder="Nieuwe ronde"></td>
-                        <td><input type="number" class="form-control form-control-sm" name="rounds[<?= $newIdx ?>][round_order]" value="<?= $newIdx ?>" min="0" style="width:80px"></td>
+                        <td><input type="number" class="form-control form-control-sm" name="rounds[<?= $newIdx ?>][round_order]" value="<?= $nextOrder ?>" min="0" style="width:80px"></td>
                         <td><input type="number" class="form-control form-control-sm" name="rounds[<?= $newIdx ?>][team_slot_count]" value="2" min="1" style="width:80px"></td>
                         <td><input type="checkbox" class="form-check-input" name="rounds[<?= $newIdx ?>][is_active]" value="1" checked></td>
                     </tr>
