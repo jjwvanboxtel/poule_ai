@@ -103,13 +103,13 @@ final class MatchResultController
 
         $stmt = $this->pdo->prepare(
             'INSERT INTO match_results
-                 (match_id, home_score, away_score, outcome,
+                 (match_id, home_score, away_score, result_outcome,
                   yellow_cards_home, yellow_cards_away, red_cards_home, red_cards_away, recorded_at)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
              ON DUPLICATE KEY UPDATE
                  home_score         = VALUES(home_score),
                  away_score         = VALUES(away_score),
-                 outcome            = VALUES(outcome),
+                 result_outcome     = VALUES(result_outcome),
                  yellow_cards_home  = VALUES(yellow_cards_home),
                  yellow_cards_away  = VALUES(yellow_cards_away),
                  red_cards_home     = VALUES(red_cards_home),

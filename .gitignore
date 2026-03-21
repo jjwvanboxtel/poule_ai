@@ -63,3 +63,8 @@ node_modules/.cache/playwright/
 /playwright-report/
 /coverage/
 .phpunit.result.cache
+/storage/logos
+/test-results
+*.cache
+*.cache
+.phpunit.result.cache
