@@ -61,6 +61,21 @@ abstract class HttpTestCase extends TestCase
         self::assertSame('/dashboard', $response['headers']['location'] ?? null);
     }
 
+    protected function loginAsSeededAdmin(): void
+    {
+        $loginPage = $this->request('GET', '/login');
+        $csrfToken = $this->extractCsrfToken($loginPage['body']);
+
+        $response = $this->request('POST', '/login', [
+            '_token' => $csrfToken,
+            'email' => 'admin@example.com',
+            'password' => 'secret',
+            'intended' => '',
+        ]);
+
+        self::assertSame(302, $response['status']);
+    }
+
     /**
      * @param array<string, scalar|null> $data
      * @return array{status: int, body: string, headers: array<string, string>}

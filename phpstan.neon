@@ -6,3 +6,5 @@ parameters:
         - database
     excludePaths:
         - vendor
+    dynamicConstantNames:
+        - BASE_PATH
