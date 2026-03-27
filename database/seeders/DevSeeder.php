@@ -223,6 +223,10 @@ final class DevSeeder
 
     private function seedBonusQuestions(int $competitionId): void
     {
+        $this->pdo->prepare(
+            'UPDATE bonus_questions SET is_active = 0 WHERE competition_id = ?',
+        )->execute([$competitionId]);
+
         $questions = [
             ['Welk land wint het toernooi?', 'entity', 'country', 1],
             ['Hoeveel goals vallen er in de finale?', 'numeric', null, 2],

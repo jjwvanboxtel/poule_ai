@@ -62,3 +62,5 @@ node_modules/.cache/playwright/
 /tests/E2E/test-results/
 /playwright-report/
 /coverage/
+/storage/logos
+/test-results
